@@ -1,10 +1,61 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>jscript-practice</title>
+        <title>Library</title>
         <meta charset="UTF-8"/>
+        <style>
+            h1  {
+                width: 20%;
+                margin: auto;
+            }
+            .table {
+                width: 70%;
+                margin: 5% 10%;
+                background-color: #404040;
+                color: white;
+                box-shadow: 5px 5px #303030;
+            }
+            span {
+                display:inline-block;
+            }
+            .title {
+                width: 30%;
+            }
+            .author {
+                width: 20%;
+            }
+            .pages {
+                width: 10%;
+            }
+            .read {
+                width: 20%;
+            }
+            .vertical {
+                display:inline-block;
+                width: 2px;
+                height: 1rem;
+                box-shadow: 0 0.2rem lightgray;
+                background-color: lightgray;
+            }
+            .horizontal {
+                display: block;
+                width: 100%;
+                height: 2px;
+                background-color: lightgray;
+            }
+        </style>
     </head>
     <body>
+        <h1>Library</h1>
+        <div class="table">
+            <div class="headline">
+                <span class="title">Title</span><div class="vertical"></div>
+                <span class="author">Author</span><div class="vertical"></div>
+                <span class="pages">Pages</span><div class="vertical"></div>
+                <span class="read">Is it read?</span><div class="vertical"></div>
+                <div class="horizontal"></div>
+            </div>
+        </div>
         <script src="library.js"></script>
     </body>
 </html>
