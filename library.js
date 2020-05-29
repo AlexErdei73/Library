@@ -1,4 +1,6 @@
-function book(title, author, pages, isRead){
+let myLibrary = [];
+
+function Book(title, author, pages, isRead){
     this.title = title,
     this.author = author,
     this.pages = pages,
@@ -15,5 +17,14 @@ function book(title, author, pages, isRead){
     }
 }
 
-const mybook = new book('The Hobbit', 'J.R.R. Tolkien', 295, false);
-console.log(mybook.info());
+function addBookToLibrary(title, author, pages, isRead){
+    const newbook = new Book(title, author, pages, isRead);
+    myLibrary.push(newbook);
+}
+
+addBookToLibrary('The Hobbit', 'J.R.R. Tolkien', 295, false);
+addBookToLibrary('Classical Mechanics', 'John Taylor', 786, true);
+addBookToLibrary('Mathematical methodes in the physical sciences', 'Mary L. Boas', 793, true);
+console.log(myLibrary[0]);
+console.log(myLibrary[1]);
+console.log(myLibrary[2]);
