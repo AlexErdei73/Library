@@ -24,24 +24,31 @@ function addBookToLibrary(title, author, pages, isRead){
 
 function newLineToHTML(book, index){
     const table = document.querySelector('table');
-    const className = 'line-' + index.toString();
+    const attributeName = 'data-indexNumber';
     const tr = document.createElement('tr');
     const td1 = document.createElement('td');
     const td2 = document.createElement('td');
     const td3 = document.createElement('td');
     const td4 = document.createElement('td');
     const td5 = document.createElement('td');
+    const button = document.createElement('button');
 
     td1.textContent = book.title;
     td2.textContent = book.author;
     td3.textContent = book.pages;
     if (book.isRead) {
         td4.textContent = 'Yes';
+        button.textContent = 'No';
     } else {
         td4.textContent = 'No';
+        button.textContent = 'Yes';
     }
+    button.classList.add('toggle');
+    button.setAttribute(attributeName, index.toString());
+    button.addEventListener('click',toggleRead);
+    td5.appendChild(button);
 
-    tr.classList.add(className);
+    tr.setAttribute(attributeName, index.toString());
     tr.appendChild(td1);
     tr.appendChild(td2);
     tr.appendChild(td3);
@@ -54,6 +61,23 @@ function render(){
     for (let i = 0; i < myLibrary.length; i++) {
         newLineToHTML(myLibrary[i], i);
         console.log(myLibrary[i].info());
+    }
+}
+
+function toggleRead(e) {
+    const button = e.target;
+    const index = button.getAttribute('data-indexnumber');
+    const td5 = button.parentNode;
+    const tr = td5.parentNode;
+    const td4 = tr.children[3];
+
+    myLibrary[index].isRead = !myLibrary[index].isRead;
+    if (myLibrary[index].isRead) {
+        td4.textContent = 'Yes';
+        button.textContent = 'No';
+    } else {
+        td4.textContent = 'No';
+        button.textContent = 'Yes';
     }
 }
 
