@@ -22,6 +22,18 @@ function addBookToLibrary(title, author, pages, isRead){
     myLibrary.push(newbook);
 }
 
+//set the textContent of the td and button elements in the DOM according to the book.isRead status
+function setReadStatus(td, button, book){
+    if (book.isRead) {
+        td.textContent = 'Yes';
+        button.textContent = 'No';
+    } else {
+        td.textContent = 'No';
+        button.textContent = 'Yes';
+    }
+}
+
+//add a new line about the book to the HTML table
 function newLineToHTML(book, index){
     const table = document.querySelector('table');
     const attributeName = 'data-indexNumber';
@@ -36,15 +48,8 @@ function newLineToHTML(book, index){
     td1.textContent = book.title;
     td2.textContent = book.author;
     td3.textContent = book.pages;
-    if (book.isRead) {
-        td4.textContent = 'Yes';
-        button.textContent = 'No';
-    } else {
-        td4.textContent = 'No';
-        button.textContent = 'Yes';
-    }
+    setReadStatus(td4, button, book);   //set the textContent of the td and button elements in the DOM according to the book.isRead status
     button.classList.add('toggle');
-    button.setAttribute(attributeName, index.toString());
     button.addEventListener('click',toggleRead);
     td5.appendChild(button);
 
@@ -66,19 +71,14 @@ function render(){
 
 function toggleRead(e) {
     const button = e.target;
-    const index = button.getAttribute('data-indexnumber');
     const td5 = button.parentNode;
     const tr = td5.parentNode;
+    const index = tr.getAttribute('data-indexnumber');
     const td4 = tr.children[3];
+    const book = myLibrary[index];
 
-    myLibrary[index].isRead = !myLibrary[index].isRead;
-    if (myLibrary[index].isRead) {
-        td4.textContent = 'Yes';
-        button.textContent = 'No';
-    } else {
-        td4.textContent = 'No';
-        button.textContent = 'Yes';
-    }
+    book.isRead = !book.isRead;
+    setReadStatus(td4, button, book);     //set the textContent of the td and button elements in the DOM according to the book.isRead status 
 }
 
 addBookToLibrary('The Hobbit', 'J.R.R. Tolkien', 295, false);
