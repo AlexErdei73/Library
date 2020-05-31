@@ -98,6 +98,7 @@ function toggleRead(button) {
 
     book.isRead = !book.isRead;
     setReadStatus(td4, button, book);     //set the textContent of the td and button elements in the DOM according to the book.isRead status 
+    saveLibrary();
 }
 
 function removeBook(button){
@@ -107,6 +108,7 @@ function removeBook(button){
 
     removeBookFromLibrary(index);
     recreateHTMLTable();
+    saveLibrary();
 }
 
 function hideForm(button){
@@ -125,7 +127,7 @@ function submitForm(button){
     const title = document.querySelector('#title').value;
     const author = document.querySelector('#author').value;
     let pages = document.querySelector('#pages').value;
-    const isRead = document.querySelector('#yes').value;
+    const isRead = document.querySelector('#yes').checked;
     
     const index = myLibrary.length;
     //return if pages cannot be converted to an integer or negative number
@@ -136,6 +138,7 @@ function submitForm(button){
     const newbook = addBookToLibrary(title, author, pages, isRead);
     newLineToHTML(newbook, index);
     hideForm(button);
+    saveLibrary();
 }
 
 //general event handler for all the buttons for the click event
@@ -156,6 +159,47 @@ function onButtonClick(e) {
     }
 }
 
+function saveLibrary(){
+    const len = myLibrary.length;
+    let read = '';
+    localStorage.clear();
+    localStorage.setItem('length', len);
+    for (let i = 0; i < len; i++) {
+        localStorage.setItem(i + 'title', myLibrary[i].title);
+        localStorage.setItem(i + 'author', myLibrary[i].author);
+        localStorage.setItem(i + 'pages', myLibrary[i].pages);
+        if (myLibrary[i].isRead) {
+            read = 'yes';
+        } else {
+            read = 'no';
+        }
+        localStorage.setItem(i + 'read', read);
+    }
+}
+
+function loadLibrary(){
+    if (!localStorage.getItem('length')){
+        return false;
+    } else {
+        myLibrary = [];
+        let title = '';
+        let author = '';
+        let pages = 0;
+        let read = '';
+        let isRead = false;
+        const len = Number(localStorage.getItem('length'));
+        for (let i = 0; i < len; i++){
+            title = localStorage.getItem(i + 'title');
+            author = localStorage.getItem(i + 'author');
+            pages = Number(localStorage.getItem(i + 'pages'));
+            read = localStorage.getItem(i + 'read');
+            isRead = (read == 'yes');
+            addBookToLibrary(title, author, pages, isRead);
+        }
+        return true;
+    }
+}
+
 const cancelButton = document.querySelector('#cancel');
 const submitButton = document.querySelector('#submit');
 const newBookButton = document.querySelector('#new-book');
@@ -163,8 +207,9 @@ cancelButton.addEventListener('click', onButtonClick);
 submitButton.addEventListener('click', onButtonClick);
 newBookButton.addEventListener('click', onButtonClick);
 
-addBookToLibrary('The Hobbit', 'J.R.R. Tolkien', 295, false);
-addBookToLibrary('Classical Mechanics', 'John Taylor', 786, true);
-addBookToLibrary('Mathematical methodes in the physical sciences', 'Mary L. Boas', 793, true);
+if (!loadLibrary()) {
+    saveLibrary();
+}
+
 render();
 hideForm(newBookButton);
