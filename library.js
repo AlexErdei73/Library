@@ -74,7 +74,7 @@ function newLineToHTML(book, index){
     table.appendChild(tr);
 }
 
-function removeLineFromHTML(index){
+function recreateHTMLTable(){
     const trAll = document.querySelectorAll('[data-indexnumber]');
     trAll.forEach(tr => tr.remove());
     render();
@@ -106,7 +106,7 @@ function removeBook(button){
     const index = tr.getAttribute('data-indexnumber');
 
     removeBookFromLibrary(index);
-    removeLineFromHTML(index);
+    recreateHTMLTable();
 }
 
 function hideForm(button){
