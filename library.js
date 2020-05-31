@@ -23,6 +23,10 @@ function addBookToLibrary(title, author, pages, isRead){
     return newbook;
 }
 
+function removeBookFromLibrary(index){
+    myLibrary.splice(index, 1);
+}
+
 //set the textContent of the td and button elements in the DOM according to the book.isRead status
 function setReadStatus(td, button, book){
     if (book.isRead) {
@@ -44,15 +48,21 @@ function newLineToHTML(book, index){
     const td3 = document.createElement('td');
     const td4 = document.createElement('td');
     const td5 = document.createElement('td');
-    const button = document.createElement('button');
+    const td6 = document.createElement('td');
+    const buttonToggle = document.createElement('button');
+    const buttonRemove = document.createElement('button');
 
     td1.textContent = book.title;
     td2.textContent = book.author;
     td3.textContent = book.pages;
-    setReadStatus(td4, button, book);   //set the textContent of the td and button elements in the DOM according to the book.isRead status
-    button.classList.add('toggle');
-    button.addEventListener('click',onButtonClick);
-    td5.appendChild(button);
+    setReadStatus(td4, buttonToggle, book);   //set the textContent of the td and button elements in the DOM according to the book.isRead status
+    buttonToggle.classList.add('toggle');
+    buttonToggle.addEventListener('click',onButtonClick);
+    buttonRemove.classList.add('remove');
+    buttonRemove.addEventListener('click',onButtonClick);
+    buttonRemove.textContent = 'Remove'
+    td5.appendChild(buttonToggle);
+    td6.appendChild(buttonRemove);
 
     tr.setAttribute(attributeName, index.toString());
     tr.appendChild(td1);
@@ -60,8 +70,14 @@ function newLineToHTML(book, index){
     tr.appendChild(td3);
     tr.appendChild(td4);
     tr.appendChild(td5);
+    tr.appendChild(td6);
     table.appendChild(tr);
 }
+
+function removeLineFromHTML(index){
+    const tr = document.querySelector('[data-indexnumber="' + index.toString() + '"]');
+    tr.remove();
+} 
 
 //add the books in myLibrary to the HTML table
 function render(){
@@ -81,6 +97,15 @@ function toggleRead(button) {
 
     book.isRead = !book.isRead;
     setReadStatus(td4, button, book);     //set the textContent of the td and button elements in the DOM according to the book.isRead status 
+}
+
+function removeBook(button){
+    const td6 = button.parentNode;
+    const tr = td6.parentNode;
+    const index = tr.getAttribute('data-indexnumber');
+
+    removeBookFromLibrary(index);
+    removeLineFromHTML(index);
 }
 
 function hideForm(button){
@@ -117,6 +142,10 @@ function onButtonClick(e) {
     const button = e.target;
     if (button.classList.contains('toggle')) {
         toggleRead(button);
+        console.log('toggle');
+    } else if (button.classList.contains('remove')) {
+        removeBook(button);
+        console.log('remove');
     } else if (button.id == 'cancel') {
         hideForm(newBookButton);
     } else if (button.id == 'submit') {
