@@ -98,10 +98,15 @@ function showForm(button){
 function submitForm(button){
     const title = document.querySelector('#title').value;
     const author = document.querySelector('#author').value;
-    const pages = document.querySelector('#pages').value;
+    let pages = document.querySelector('#pages').value;
     const isRead = document.querySelector('#yes').value;
     
     const index = myLibrary.length;
+    //return if pages cannot be converted to an integer or negative number
+    pages = parseInt(pages);
+    if (isNaN(pages)) return
+    if (pages < 0) return
+
     const newbook = addBookToLibrary(title, author, pages, isRead);
     newLineToHTML(newbook, index);
     hideForm(button);
