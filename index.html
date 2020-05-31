@@ -13,6 +13,8 @@
                 width: 70%;
                 background-color: #404040;
                 color:ivory;
+                margin-left: 2%;
+                margin-top: 3rem;
             }
             td, th{
                 border: 1px solid lightgray;
@@ -27,10 +29,65 @@
                 width: 4rem;
                 margin: auto;
             }
+            form {
+                display: block;
+                margin-right: 2%;
+                margin-top: 2.5rem;
+                width: 18%;
+                background-color:#404040;
+                color: ivory;
+                padding: 1rem;
+                float: right;
+                clear: right;
+            }
+            .hidden {
+                visibility: hidden;
+            }
+            input[type=text], input[type=number] {
+                width: 97%;
+                height: 1.5rem;
+                font-size: 1rem;
+                background-color:#a0a0a0;
+                color:#404040;
+            }
+            #cancel {
+                width: 5rem;
+                height: 2rem;
+                float: left;
+            }
+            #submit {
+                width: 5rem;
+                height: 2rem;
+                float: right;
+            }
+            #new-book {
+                display: block;
+                width: 7rem;
+                height: 2rem;
+                margin-right: 3rem;
+                margin-top: 1rem;
+                float: right;
+            }
         </style>
     </head>
     <body>
+        <button type="button" id="new-book">New Book</button>
         <h1>Library</h1>
+        <form>
+            <label for="title">Title:</label><br>
+            <input type="text" id="title"><br><br>
+            <label for="author">Author:</label><br>
+            <input type="text" id="author"><br><br>
+            <label for="pages">Pages:</label><br>
+            <input type="number" id="pages"><br><br>
+            <label>Is it read?</label><br>
+            <input type="radio" id="yes" name="read" value="yes">
+            <label for="yes">Yes</label><br>
+            <input type="radio" id="no" name="read" value="no">
+            <label for="no">No</label><br><br>
+            <button type="button" id="cancel">Cancel</button>
+            <button type="button" id="submit">Submit</button>
+        </form>
         <table>
             <tr>
                 <th class='title'>Title</th>

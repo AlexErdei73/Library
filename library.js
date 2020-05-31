@@ -20,6 +20,7 @@ function Book(title, author, pages, isRead){
 function addBookToLibrary(title, author, pages, isRead){
     const newbook = new Book(title, author, pages, isRead);
     myLibrary.push(newbook);
+    return newbook;
 }
 
 //set the textContent of the td and button elements in the DOM according to the book.isRead status
@@ -50,7 +51,7 @@ function newLineToHTML(book, index){
     td3.textContent = book.pages;
     setReadStatus(td4, button, book);   //set the textContent of the td and button elements in the DOM according to the book.isRead status
     button.classList.add('toggle');
-    button.addEventListener('click',toggleRead);
+    button.addEventListener('click',onButtonClick);
     td5.appendChild(button);
 
     tr.setAttribute(attributeName, index.toString());
@@ -62,6 +63,7 @@ function newLineToHTML(book, index){
     table.appendChild(tr);
 }
 
+//add the books in myLibrary to the HTML table
 function render(){
     for (let i = 0; i < myLibrary.length; i++) {
         newLineToHTML(myLibrary[i], i);
@@ -69,8 +71,8 @@ function render(){
     }
 }
 
-function toggleRead(e) {
-    const button = e.target;
+//event handler for the toggle buttons, which toggle the isRead status of the books
+function toggleRead(button) {
     const td5 = button.parentNode;
     const tr = td5.parentNode;
     const index = tr.getAttribute('data-indexnumber');
@@ -81,7 +83,53 @@ function toggleRead(e) {
     setReadStatus(td4, button, book);     //set the textContent of the td and button elements in the DOM according to the book.isRead status 
 }
 
+function hideForm(button){
+    const form = document.querySelector('form');
+    form.classList.add('hidden');
+    button.classList.remove('hidden');
+}
+
+function showForm(button){
+    const form = document.querySelector('form');
+    form.classList.remove('hidden');
+    button.classList.add('hidden');
+}
+
+function submitForm(button){
+    const title = document.querySelector('#title').value;
+    const author = document.querySelector('#author').value;
+    const pages = document.querySelector('#pages').value;
+    const isRead = document.querySelector('#yes').value;
+    
+    const index = myLibrary.length;
+    const newbook = addBookToLibrary(title, author, pages, isRead);
+    newLineToHTML(newbook, index);
+    hideForm(button);
+}
+
+//general event handler for all the buttons for the click event
+function onButtonClick(e) {
+    const button = e.target;
+    if (button.classList.contains('toggle')) {
+        toggleRead(button);
+    } else if (button.id == 'cancel') {
+        hideForm(newBookButton);
+    } else if (button.id == 'submit') {
+        submitForm(newBookButton);
+    } else if (button.id == 'new-book'){
+        showForm(button);
+    }
+}
+
+const cancelButton = document.querySelector('#cancel');
+const submitButton = document.querySelector('#submit');
+const newBookButton = document.querySelector('#new-book');
+cancelButton.addEventListener('click', onButtonClick);
+submitButton.addEventListener('click', onButtonClick);
+newBookButton.addEventListener('click', onButtonClick);
+
 addBookToLibrary('The Hobbit', 'J.R.R. Tolkien', 295, false);
 addBookToLibrary('Classical Mechanics', 'John Taylor', 786, true);
 addBookToLibrary('Mathematical methodes in the physical sciences', 'Mary L. Boas', 793, true);
 render();
+hideForm(newBookButton);
