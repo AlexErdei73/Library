@@ -75,8 +75,9 @@ function newLineToHTML(book, index){
 }
 
 function removeLineFromHTML(index){
-    const tr = document.querySelector('[data-indexnumber="' + index.toString() + '"]');
-    tr.remove();
+    const trAll = document.querySelectorAll('[data-indexnumber]');
+    trAll.forEach(tr => tr.remove());
+    render();
 } 
 
 //add the books in myLibrary to the HTML table
