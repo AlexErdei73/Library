@@ -131,12 +131,11 @@ function submitForm(button){
     const author = document.querySelector('#author').value;
     let pages = document.querySelector('#pages').value;
     const isRead = document.querySelector('#yes').checked;
+    const form = document.querySelector('form');
     
     const index = myLibrary.length;
-    //return if pages cannot be converted to an integer or negative number
-    pages = parseInt(pages);
-    if (isNaN(pages)) return
-    if (pages < 0) return
+    //returns if the form is invalid
+    if (!form.validity.valid) return
 
     const newbook = addBookToLibrary(title, author, pages, isRead);
     newLineToHTML(newbook, index);

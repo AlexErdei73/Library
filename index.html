@@ -50,6 +50,9 @@
                 background-color:#a0a0a0;
                 color:#404040;
             }
+            input:invalid {
+                border: 2px solid red;
+            }
             #cancel {
                 width: 5rem;
                 height: 2rem;
@@ -75,11 +78,11 @@
         <h1>Library</h1>
         <form>
             <label for="title">Title:</label><br>
-            <input type="text" id="title"><br><br>
+            <input type="text" id="title" required><br><br>
             <label for="author">Author:</label><br>
-            <input type="text" id="author"><br><br>
+            <input type="text" id="author" required><br><br>
             <label for="pages">Pages:</label><br>
-            <input type="number" id="pages"><br><br>
+            <input type="number" id="pages" min="1"><br><br>
             <label>Is it read?</label><br>
             <input type="radio" id="yes" name="read" value="yes">
             <label for="yes">Yes</label><br>
