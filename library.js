@@ -135,7 +135,7 @@ function submitForm(button){
     
     const index = myLibrary.length;
     //returns if the form is invalid
-    if (!form.validity.valid) return
+    if (!form.checkValidity()) return
 
     const newbook = addBookToLibrary(title, author, pages, isRead);
     newLineToHTML(newbook, index);
