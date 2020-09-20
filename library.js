@@ -126,6 +126,12 @@ function showForm(button){
     button.classList.add('hidden');
 }
 
+function deleteFormInputs() {
+    const form = document.querySelector('form');
+    inputs = form.querySelectorAll('input');
+    inputs.forEach(input => input.value = '');
+}
+
 function submitForm(button){
     const title = document.querySelector('#title').value;
     const author = document.querySelector('#author').value;
@@ -157,6 +163,7 @@ function onButtonClick(e) {
     } else if (button.id == 'submit') {
         submitForm(newBookButton);
     } else if (button.id == 'new-book'){
+        deleteFormInputs();
         showForm(button);
     }
 }
