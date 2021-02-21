@@ -1,106 +1,134 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Library</title>
-        <meta charset="UTF-8"/>
-        <style>
-            h1  {
-                width: 20%;
-                margin: auto;
-            }
-            table {
-                border-collapse: collapse;
-                width: 70%;
-                background-color: #404040;
-                color:ivory;
-                margin-left: 2%;
-                margin-top: 3rem;
-            }
-            td, th{
-                border: 1px solid lightgray;
-                text-align: left;
-                padding: 8px;
-            }
-            tr:nth-child(even){
-                background-color: #a0a0a0;
-            }
-            button {
-                display: block;
-                width: 5rem;
-                margin: auto;
-            }
-            form {
-                display: block;
-                margin-right: 2%;
-                margin-top: 2.5rem;
-                width: 18%;
-                background-color:#404040;
-                color: ivory;
-                padding: 1rem;
-                float: right;
-                clear: right;
-            }
-            .hidden {
-                visibility: hidden;
-            }
-            input[type=text], input[type=number] {
-                width: 97%;
-                height: 1.5rem;
-                font-size: 1rem;
-                background-color:#a0a0a0;
-                color:#404040;
-            }
-            input:invalid {
-                border: 2px solid red;
-            }
-            #cancel {
-                width: 5rem;
-                height: 2rem;
-                float: left;
-            }
-            #submit {
-                width: 5rem;
-                height: 2rem;
-                float: right;
-            }
-            #new-book {
-                display: block;
-                width: 7rem;
-                height: 2rem;
-                margin-right: 3rem;
-                margin-top: 1rem;
-                float: right;
-            }
-        </style>
-    </head>
-    <body>
-        <button type="button" id="new-book">New Book</button>
-        <h1>Library</h1>
-        <form>
-            <label for="title">Title:</label><br>
-            <input type="text" id="title" required><br><br>
-            <label for="author">Author:</label><br>
-            <input type="text" id="author" required><br><br>
-            <label for="pages">Pages:</label><br>
-            <input type="number" id="pages" min="1"><br><br>
-            <label>Is it read?</label><br>
-            <input type="radio" id="yes" name="read" value="yes">
-            <label for="yes">Yes</label><br>
-            <input type="radio" id="no" name="read" value="no">
-            <label for="no">No</label><br><br>
-            <button type="button" id="cancel">Cancel</button>
-            <button type="button" id="submit">Submit</button>
-        </form>
-        <table>
-            <tr>
-                <th class='title'>Title</th>
-                <th class='author'>Author</th>
-                <th class='pages'>Pages</th>
-                <th class='read'>Is it read?</th>
-                <th>Toggle Button</th>
-                <th>Remove Button</th>
-            </tr>
-        </table>
-        <script src="library.js"></script>
-    </body>
+  <head>
+    <title>Library</title>
+    <meta charset="UTF-8" />
+    <style>
+      h1 {
+        width: 20%;
+        margin: auto;
+      }
+      table {
+        border-collapse: collapse;
+        width: 70%;
+        background-color: #404040;
+        color: ivory;
+        margin-left: 2%;
+        margin-top: 3rem;
+      }
+      td,
+      th {
+        border: 1px solid lightgray;
+        text-align: left;
+        padding: 8px;
+      }
+      tr:nth-child(even) {
+        background-color: #a0a0a0;
+      }
+      button {
+        display: block;
+        width: 5rem;
+        margin: auto;
+      }
+      form {
+        display: block;
+        margin-right: 2%;
+        margin-top: 2.5rem;
+        width: 18%;
+        background-color: #404040;
+        color: ivory;
+        padding: 1rem;
+        float: right;
+        clear: right;
+      }
+      .hidden {
+        visibility: hidden;
+      }
+      input[type="text"],
+      input[type="number"] {
+        width: 97%;
+        height: 1.5rem;
+        font-size: 1rem;
+        background-color: #a0a0a0;
+        color: #404040;
+      }
+      input:invalid {
+        border: 2px solid red;
+      }
+      #cancel {
+        width: 5rem;
+        height: 2rem;
+        float: left;
+      }
+      #submit {
+        width: 5rem;
+        height: 2rem;
+        float: right;
+      }
+      #new-book {
+        display: block;
+        width: 7rem;
+        height: 2rem;
+        margin-right: 3rem;
+        margin-top: 1rem;
+        float: right;
+      }
+    </style>
+  </head>
+  <body>
+    <button type="button" id="new-book">New Book</button>
+    <h1>Library</h1>
+    <form>
+      <label for="title">Title:</label><br />
+      <input type="text" id="title" required /><br /><br />
+      <label for="author">Author:</label><br />
+      <input type="text" id="author" required /><br /><br />
+      <label for="pages">Pages:</label><br />
+      <input type="number" id="pages" min="1" /><br /><br />
+      <label>Is it read?</label><br />
+      <input type="radio" id="yes" name="read" value="yes" />
+      <label for="yes">Yes</label><br />
+      <input type="radio" id="no" name="read" value="no" />
+      <label for="no">No</label><br /><br />
+      <button type="button" id="cancel">Cancel</button>
+      <button type="button" id="submit">Submit</button>
+    </form>
+    <table>
+      <tr>
+        <th class="title">Title</th>
+        <th class="author">Author</th>
+        <th class="pages">Pages</th>
+        <th class="read">Is it read?</th>
+        <th>Toggle Button</th>
+        <th>Remove Button</th>
+      </tr>
+    </table>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+            https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-firestore.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      var firebaseConfig = {
+        apiKey: "AIzaSyDb3yY2Y8WK-YZGsqAF0plCmc0XRuOI3Cc",
+        authDomain: "library-d3810.firebaseapp.com",
+        projectId: "library-d3810",
+        storageBucket: "library-d3810.appspot.com",
+        messagingSenderId: "1037026235644",
+        appId: "1:1037026235644:web:dc757ffaaba145348f7379",
+        measurementId: "G-2FT66RB4V7",
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+
+      var db = firebase.firestore();
+    </script>
+    <script src="library.js"></script>
+  </body>
 </html>
