@@ -102,7 +102,8 @@ function toggleRead(button) {
 
   book.isRead = !book.isRead;
   setReadStatus(td4, button, book); //set the textContent of the td and button elements in the DOM according to the book.isRead status
-  saveLibrary(db);
+  //saveLibrary(db);
+  changeBook(index, book);
 }
 
 function removeBook(button) {
@@ -167,7 +168,7 @@ function onButtonClick(e) {
   }
 }
 
-function saveLibrary(database) {
+/*function saveLibrary(database) {
   const len = myLibrary.length;
   const books = myLibrary.map((book) => {
     let read = "";
@@ -197,7 +198,7 @@ function saveLibrary(database) {
     });
 }
 
-/*function loadLibrary(database) {
+function loadLibrary(database) {
   var docRef = database.collection("library").doc("user");
 
   docRef
@@ -250,6 +251,26 @@ function loadLibrary() {
       render();
       hideForm(newBookButton);
     })
+    .catch((err) => console.error(err))
+}
+
+function changeBook(index, book) {
+  index++;
+  const payload = {
+    title: book.title,
+    author: book.author,
+    pages: book.pages,
+    book_id: index,
+    is_read: Number(book.isRead)
+  }
+  console.log(payload);
+  fetch(BASE_URL + "/book", 
+    { 
+      method: "PUT",
+      headers: {'Content-Type': 'application/json'}, 
+      body: JSON.stringify(payload) 
+    })
+    .then((res) => console.log(res))
     .catch((err) => console.error(err))
 }
 
