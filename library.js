@@ -112,8 +112,14 @@ function removeBook(button) {
   const tr = td6.parentNode;
   const index = tr.getAttribute("data-indexnumber");
 
-  removeBookFromLibrary(index);
-  recreateHTMLTable();
+  const id = myLibrary[index].book_id;
+  console.log(id);
+  deleteBook(id)
+    .then((json) => {
+      console.log(json);
+      removeBookFromLibrary(index);
+      recreateHTMLTable();
+    });
   //saveLibrary(db);
 }
 
@@ -133,14 +139,6 @@ function deleteFormInputs() {
   const form = document.querySelector("form");
   inputs = form.querySelectorAll("input");
   inputs.forEach((input) => (input.value = ""));
-}
-
-function genNextId() {
-  let maxId = 0;
-  myLibrary.forEach((book) => {
-    if (book.book_id > maxId) maxId = book.book_id;
-  });
-  return (maxId + 1);
 }
 
 function submitForm(button) {
@@ -306,6 +304,17 @@ function saveBook(book) {
     })
     .catch((err) => console.error(err))
 } 
+
+function deleteBook(id) {
+  const url = `${BOOK_URL}?book_id=${id}`;
+  return fetch(url, 
+    { 
+      method: "DELETE",
+      headers: {'Content-Type': 'application/json'}, 
+    })
+    .then((res) => res.json())
+    .catch((err) => console.error(err))
+}
 
 const cancelButton = document.querySelector("#cancel");
 const submitButton = document.querySelector("#submit");
