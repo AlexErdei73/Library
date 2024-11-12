@@ -197,7 +197,7 @@ function saveLibrary(database) {
     });
 }
 
-function loadLibrary(database) {
+/*function loadLibrary(database) {
   var docRef = database.collection("library").doc("user");
 
   docRef
@@ -227,6 +227,30 @@ function loadLibrary(database) {
     .catch((error) => {
       console.log("Error getting document:", error);
     });
+}*/
+
+const BASE_URL = "https://alexerdei-team.us.ainiro.io/magic/modules/books";
+
+function loadLibrary() {
+  fetch(BASE_URL+"/book")
+    .then((res) => res.json())
+    .then((json) => {
+      console.log(json);
+      myLibrary = [];
+      let book = {};
+      const books = json;
+      const len = books.length;
+      let isRead = false;
+      for (let i = 0; i < len; i++) {
+        book = books[i];
+        if (book.is_read === 1) isRead = true;
+          else isRead = false;
+          addBookToLibrary(book.title, book.author, book.pages, isRead);
+      }
+      render();
+      hideForm(newBookButton);
+    })
+    .catch((err) => console.error(err))
 }
 
 const cancelButton = document.querySelector("#cancel");
