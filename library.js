@@ -1,11 +1,12 @@
 let myLibrary = [];
 
 class Book {
-  constructor(title, author, pages, isRead) {
+  constructor(title, author, pages, isRead, book_id) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.isRead = isRead;
+    this.book_id = book_id;
   }
 
   info() {
@@ -21,8 +22,8 @@ class Book {
   }
 }
 
-function addBookToLibrary(title, author, pages, isRead) {
-  const newbook = new Book(title, author, pages, isRead);
+function addBookToLibrary(title, author, pages, isRead, book_id) {
+  const newbook = new Book(title, author, pages, isRead, book_id);
   myLibrary.push(newbook);
   return newbook;
 }
@@ -103,7 +104,7 @@ function toggleRead(button) {
   book.isRead = !book.isRead;
   setReadStatus(td4, button, book); //set the textContent of the td and button elements in the DOM according to the book.isRead status
   //saveLibrary(db);
-  changeBook(index, book);
+  changeBook(book);
 }
 
 function removeBook(button) {
@@ -113,7 +114,7 @@ function removeBook(button) {
 
   removeBookFromLibrary(index);
   recreateHTMLTable();
-  saveLibrary(db);
+  //saveLibrary(db);
 }
 
 function hideForm(button) {
@@ -134,6 +135,14 @@ function deleteFormInputs() {
   inputs.forEach((input) => (input.value = ""));
 }
 
+function genNextId() {
+  let maxId = 0;
+  myLibrary.forEach((book) => {
+    if (book.book_id > maxId) maxId = book.book_id;
+  });
+  return (maxId + 1);
+}
+
 function submitForm(button) {
   const title = document.querySelector("#title").value;
   const author = document.querySelector("#author").value;
@@ -145,10 +154,14 @@ function submitForm(button) {
   //returns if the form is invalid
   if (!form.checkValidity()) return;
 
-  const newbook = addBookToLibrary(title, author, pages, isRead);
-  newLineToHTML(newbook, index);
-  hideForm(button);
-  saveLibrary(db);
+  saveBook({title, author, pages, isRead})
+    .then((id) => {
+      pages = pages || 0;
+      const newbook = addBookToLibrary(title, author, pages, isRead, id);
+      newLineToHTML(newbook, index);
+      hideForm(button);
+    });
+  //saveLibrary(db);
 }
 
 //general event handler for all the buttons for the click event
@@ -230,10 +243,10 @@ function loadLibrary(database) {
     });
 }*/
 
-const BASE_URL = "https://alexerdei-team.us.ainiro.io/magic/modules/books";
+const BOOK_URL = "https://alexerdei-team.us.ainiro.io/magic/modules/books/book";
 
 function loadLibrary() {
-  fetch(BASE_URL+"/book")
+  fetch(BOOK_URL)
     .then((res) => res.json())
     .then((json) => {
       console.log(json);
@@ -246,25 +259,24 @@ function loadLibrary() {
         book = books[i];
         if (book.is_read === 1) isRead = true;
           else isRead = false;
-          addBookToLibrary(book.title, book.author, book.pages, isRead);
+          addBookToLibrary(book.title, book.author, book.pages, isRead, book.book_id);
       }
       render();
       hideForm(newBookButton);
     })
-    .catch((err) => console.error(err))
+    .catch((err) => console.error(err));
 }
 
-function changeBook(index, book) {
-  index++;
+function changeBook(book) {
   const payload = {
     title: book.title,
     author: book.author,
     pages: book.pages,
-    book_id: index,
+    book_id: book.book_id,
     is_read: Number(book.isRead)
   }
   console.log(payload);
-  fetch(BASE_URL + "/book", 
+  fetch(BOOK_URL, 
     { 
       method: "PUT",
       headers: {'Content-Type': 'application/json'}, 
@@ -273,6 +285,27 @@ function changeBook(index, book) {
     .then((res) => console.log(res))
     .catch((err) => console.error(err))
 }
+
+function saveBook(book) {
+  const payload = {
+    title: book.title,
+    author: book.author,
+    pages: book.pages || 0,
+    is_read: Number(book.isRead)
+  }
+  return fetch(BOOK_URL, 
+    { 
+      method: "POST",
+      headers: {'Content-Type': 'application/json'}, 
+      body: JSON.stringify(payload) 
+    })
+    .then((res) => res.json())
+    .then((json) => {
+      console.log(json.id);
+      return json.id;
+    })
+    .catch((err) => console.error(err))
+} 
 
 const cancelButton = document.querySelector("#cancel");
 const submitButton = document.querySelector("#submit");
