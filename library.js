@@ -212,7 +212,6 @@ function changeBook(book) {
     book_id: book.book_id,
     is_read: Number(book.isRead)
   }
-  console.log(payload);
   fetch(BOOK_URL, 
     { 
       method: "PUT",
