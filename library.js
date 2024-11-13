@@ -102,8 +102,8 @@ function toggleRead(button) {
   const book = myLibrary[index];
 
   book.isRead = !book.isRead;
-  setReadStatus(td4, button, book); //set the textContent of the td and button elements in the DOM according to the book.isRead status
-  //saveLibrary(db);
+  setReadStatus(td4, button, book); //set the textContent of the td and button elements in the DOM 
+                                    // according to the book.isRead status
   changeBook(book);
 }
 
@@ -113,14 +113,11 @@ function removeBook(button) {
   const index = tr.getAttribute("data-indexnumber");
 
   const id = myLibrary[index].book_id;
-  console.log(id);
   deleteBook(id)
-    .then((json) => {
-      console.log(json);
+    .then(() => {
       removeBookFromLibrary(index);
       recreateHTMLTable();
     });
-  //saveLibrary(db);
 }
 
 function hideForm(button) {
@@ -153,13 +150,13 @@ function submitForm(button) {
   if (!form.checkValidity()) return;
 
   saveBook({title, author, pages, isRead})
-    .then((id) => {
+    .then((json) => {
+      const id = json.id;
       pages = pages || 0;
       const newbook = addBookToLibrary(title, author, pages, isRead, id);
       newLineToHTML(newbook, index);
       hideForm(button);
     });
-  //saveLibrary(db);
 }
 
 //general event handler for all the buttons for the click event
@@ -179,75 +176,17 @@ function onButtonClick(e) {
   }
 }
 
-/*function saveLibrary(database) {
-  const len = myLibrary.length;
-  const books = myLibrary.map((book) => {
-    let read = "";
-    if (book.isRead) {
-      read = "yes";
-    } else {
-      read = "no";
-    }
-    return {
-      title: book.title,
-      author: book.author,
-      pages: book.pages,
-      read: read,
-    };
-  });
-  return database
-    .collection("library")
-    .doc("user")
-    .set({
-      books: books,
-    })
-    .then(() => {
-      console.log("Document successfully written!");
-    })
-    .catch((error) => {
-      console.error("Error writing document: ", error);
-    });
-}
-
-function loadLibrary(database) {
-  var docRef = database.collection("library").doc("user");
-
-  docRef
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        console.log("Document data:", doc.data());
-        myLibrary = [];
-        let book = {};
-        const books = doc.data().books;
-        const len = books.length;
-        let isRead = false;
-        for (let i = 0; i < len; i++) {
-          book = books[i];
-          if (book.read === "yes") isRead = true;
-          else isRead = false;
-          addBookToLibrary(book.title, book.author, book.pages, isRead);
-        }
-        render();
-        hideForm(newBookButton);
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-        saveLibrary(database);
-      }
-    })
-    .catch((error) => {
-      console.log("Error getting document:", error);
-    });
-}*/
-
 const BOOK_URL = "https://alexerdei-team.us.ainiro.io/magic/modules/books/book";
 
 function loadLibrary() {
   fetch(BOOK_URL)
-    .then((res) => res.json())
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Network response is not OK!");
+      } 
+      return res.json();
+    })
     .then((json) => {
-      console.log(json);
       myLibrary = [];
       let book = {};
       const books = json;
@@ -280,7 +219,12 @@ function changeBook(book) {
       headers: {'Content-Type': 'application/json'}, 
       body: JSON.stringify(payload) 
     })
-    .then((res) => console.log(res))
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Network response is not OK!");
+      } 
+      return res.json();
+    })
     .catch((err) => console.error(err))
 }
 
@@ -297,10 +241,11 @@ function saveBook(book) {
       headers: {'Content-Type': 'application/json'}, 
       body: JSON.stringify(payload) 
     })
-    .then((res) => res.json())
-    .then((json) => {
-      console.log(json.id);
-      return json.id;
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Network response is not OK!");
+      } 
+      return res.json();
     })
     .catch((err) => console.error(err))
 } 
@@ -312,7 +257,12 @@ function deleteBook(id) {
       method: "DELETE",
       headers: {'Content-Type': 'application/json'}, 
     })
-    .then((res) => res.json())
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Network response is not OK!");
+      } 
+      return res.json();
+    })
     .catch((err) => console.error(err))
 }
 
@@ -323,4 +273,4 @@ cancelButton.addEventListener("click", onButtonClick);
 submitButton.addEventListener("click", onButtonClick);
 newBookButton.addEventListener("click", onButtonClick);
 
-loadLibrary(db);
+loadLibrary();
