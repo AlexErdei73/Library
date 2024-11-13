@@ -104,7 +104,7 @@ function toggleRead(button) {
   book.isRead = !book.isRead;
   setReadStatus(td4, button, book); //set the textContent of the td and button elements in the DOM 
                                     // according to the book.isRead status
-  changeBook(book);
+  updateBook(book);
 }
 
 function removeBook(button) {
@@ -149,7 +149,7 @@ function submitForm(button) {
   //returns if the form is invalid
   if (!form.checkValidity()) return;
 
-  saveBook({title, author, pages, isRead})
+  createBook({title, author, pages, isRead})
     .then((json) => {
       const id = json.id;
       pages = pages || 0;
@@ -178,7 +178,8 @@ function onButtonClick(e) {
 
 const BOOK_URL = "https://alexerdei-team.us.ainiro.io/magic/modules/books/book";
 
-function loadLibrary() {
+//CRUD (Create, Read, Update, Delete) operations
+function readLibrary() {
   fetch(BOOK_URL)
     .then((res) => {
       if (!res.ok) {
@@ -204,7 +205,7 @@ function loadLibrary() {
     .catch((err) => console.error(err));
 }
 
-function changeBook(book) {
+function updateBook(book) {
   const payload = {
     title: book.title,
     author: book.author,
@@ -227,7 +228,7 @@ function changeBook(book) {
     .catch((err) => console.error(err))
 }
 
-function saveBook(book) {
+function createBook(book) {
   const payload = {
     title: book.title,
     author: book.author,
@@ -265,6 +266,7 @@ function deleteBook(id) {
     .catch((err) => console.error(err))
 }
 
+//main program
 const cancelButton = document.querySelector("#cancel");
 const submitButton = document.querySelector("#submit");
 const newBookButton = document.querySelector("#new-book");
@@ -272,4 +274,4 @@ cancelButton.addEventListener("click", onButtonClick);
 submitButton.addEventListener("click", onButtonClick);
 newBookButton.addEventListener("click", onButtonClick);
 
-loadLibrary();
+readLibrary();
